@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,7 @@ public interface SymbolDataRepository extends JpaRepository<SymbolDataEntity, UU
     List<SymbolDataEntity> findAllInPeriod(@Param("fromDate") LocalDateTime fromDate,
                                                   @Param("toDate") LocalDateTime toDate);
 
+    @Query("SELECT AVG(sd.price) FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
+    Optional<BigDecimal> getAveragePrice(@Param("fromDate") LocalDateTime fromDate,
+                                         @Param("toDate") LocalDateTime toDate);
 }

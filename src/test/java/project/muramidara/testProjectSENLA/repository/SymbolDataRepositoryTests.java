@@ -100,4 +100,40 @@ public class SymbolDataRepositoryTests {
         assertThat(obtainedSymbolData).isEmpty();
            }
 
+    @Test
+    @DisplayName("Test getAveragePrice functionality")
+    public void givenThreeSymbolDataAreStored_whenGetAveragePrice_thenAveragePriceInPeriodIsReturned(){
+        //given
+        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
+        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+
+        BigDecimal rightAveragePrice = BigDecimal.valueOf(1.5);
+
+        SymbolDataEntity symbolDataToSave1 = DataUtils.getSymbolDataEntity1Transient();
+        SymbolDataEntity symbolDataToSave2 = DataUtils.getSymbolDataEntity2Transient();
+        SymbolDataEntity symbolDataToSave3 = DataUtils.getSymbolDataEntity10Transient();
+        repository.saveAll(List.of(symbolDataToSave1, symbolDataToSave2, symbolDataToSave3));
+
+
+        //when
+        BigDecimal obtainedAveragePrice = repository.getAveragePrice(fromDate, toDate).orElse(null);
+        //then
+        assertThat(obtainedAveragePrice).isNotNull();
+        assertThat(obtainedAveragePrice).isEqualByComparingTo(rightAveragePrice);
+
+    }
+
+    @Test
+    @DisplayName("Test findAllInPeriod  SymbolData not found functionality")
+    public void givenSymbolDataIsNotStored_whenGetAveragePrice_thenNoPriceIsReturned(){
+        //given
+        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
+        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+
+        //when
+        BigDecimal obtainedAveragePrice = repository.getAveragePrice(fromDate, toDate).orElse(null);
+        //then
+        assertThat(obtainedAveragePrice).isNull();
+    }
+
 }
