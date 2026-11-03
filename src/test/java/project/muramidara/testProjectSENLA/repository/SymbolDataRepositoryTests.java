@@ -5,6 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 import project.muramidara.testProjectSENLA.util.DataUtils;
 
@@ -69,21 +72,24 @@ public class SymbolDataRepositoryTests {
 
     @Test
     @DisplayName("Test findAllInPeriod SymbolData functionality")
-    public void givenThreeSymbolDataAreStored_whenFindAllInPeriod_thenAllSymbolDataInPeriodAreReturned(){
+    public void givenThreeSymbolDataAreStored_whenFindAllInPeriod_thenNotEmptyPageIsReturned(){
         //given
         LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
         LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+        Pageable pageable = PageRequest.of(0, 5);
+
+
         SymbolDataEntity symbolDataToSave1 = DataUtils.getSymbolDataEntity1Transient();
         SymbolDataEntity symbolDataToSave2 = DataUtils.getSymbolDataEntity2Transient();
         SymbolDataEntity symbolDataToSave3 = DataUtils.getSymbolDataEntity10Transient();
         repository.saveAll(List.of(symbolDataToSave1, symbolDataToSave2, symbolDataToSave3));
 
         //when
-        List<SymbolDataEntity> obtainedSymbolData = repository.findAllInPeriod(fromDate, toDate);
+        Page<SymbolDataEntity> obtainedPage = repository.findAllInPeriod(fromDate, toDate, pageable);
         //then
-        assertThat(obtainedSymbolData).isNotEmpty();
-        assertThat(obtainedSymbolData).hasSize(2);
-        assertThat(obtainedSymbolData).extracting(SymbolDataEntity::getPrice)
+        assertThat(obtainedPage).isNotEmpty();
+        assertThat(obtainedPage.getTotalElements()).isEqualTo(2);
+        assertThat(obtainedPage).extracting(SymbolDataEntity::getPrice)
                 .contains(BigDecimal.ONE, BigDecimal.TWO);
     }
 
@@ -93,11 +99,13 @@ public class SymbolDataRepositoryTests {
         //given
         LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
         LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+        Pageable pageable = PageRequest.of(0, 5);
+
 
         //when
-        List<SymbolDataEntity> obtainedSymbolData = repository.findAllInPeriod(fromDate, toDate);
+        Page<SymbolDataEntity> obtainedPage = repository.findAllInPeriod(fromDate, toDate, pageable);
         //then
-        assertThat(obtainedSymbolData).isEmpty();
+        assertThat(obtainedPage).isEmpty();
            }
 
     @Test

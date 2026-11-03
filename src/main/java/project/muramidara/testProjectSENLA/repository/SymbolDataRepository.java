@@ -1,5 +1,7 @@
 package project.muramidara.testProjectSENLA.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,8 +21,9 @@ public interface SymbolDataRepository extends JpaRepository<SymbolDataEntity, UU
     Optional<SymbolDataEntity> findLast();
 
     @Query("SELECT sd FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
-    List<SymbolDataEntity> findAllInPeriod(@Param("fromDate") LocalDateTime fromDate,
-                                                  @Param("toDate") LocalDateTime toDate);
+    Page<SymbolDataEntity> findAllInPeriod(@Param("fromDate") LocalDateTime fromDate,
+                                           @Param("toDate") LocalDateTime toDate,
+                                           Pageable pageable);
 
     @Query("SELECT AVG(sd.price) FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
     Optional<BigDecimal> getAveragePrice(@Param("fromDate") LocalDateTime fromDate,
