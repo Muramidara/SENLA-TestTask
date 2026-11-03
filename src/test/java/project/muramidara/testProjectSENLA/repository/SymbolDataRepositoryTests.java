@@ -12,8 +12,10 @@ import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 import project.muramidara.testProjectSENLA.util.DataUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,8 +76,8 @@ public class SymbolDataRepositoryTests {
     @DisplayName("Test findFirstByFetchedAtBetweenOrderByFetchedAtDesc SymbolData functionality")
     public void givenThreeSymbolDataAreStored_whenFindFirstByFetchedAtBetweenOrderByFetchedAtDesc_thenLastSymbolDataIsReturned() {
         //given
-        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1);
-        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1);
+        Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
 
         SymbolDataEntity symbolDataToSave1 = DataUtils.getSymbolDataEntity1Transient();
         SymbolDataEntity symbolDataToSave2 = DataUtils.getSymbolDataEntity2Transient();
@@ -104,8 +106,8 @@ public class SymbolDataRepositoryTests {
     @DisplayName("Test findFirstByFetchedAtBetweenOrderByFetchedAtDesc SymbolData not found functionality")
     public void givenSymbolDataIsNotStored_whenFindFirstByFetchedAtBetweenOrderByFetchedAtDesc_thenOptionalIsEmpty() {
         //given
-        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1);
-        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1);
+        Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
 
         //when
         SymbolDataEntity obtainedSymbolData = repository
@@ -121,8 +123,8 @@ public class SymbolDataRepositoryTests {
     @DisplayName("Test findAllInPeriod SymbolData functionality")
     public void givenThreeSymbolDataAreStored_whenFindAllInPeriod_thenNotEmptyPageIsReturned(){
         //given
-        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
-        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+        Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
         Pageable pageable = PageRequest.of(0, 5);
 
 
@@ -144,8 +146,8 @@ public class SymbolDataRepositoryTests {
     @DisplayName("Test findAllInPeriod  SymbolData not found functionality")
     public void givenSymbolDataIsNotStored_whenFindAllInPeriod_thenEmptyPageIsReturned(){
         //given
-        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
-        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+        Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
         Pageable pageable = PageRequest.of(0, 5);
 
 
@@ -159,8 +161,8 @@ public class SymbolDataRepositoryTests {
     @DisplayName("Test getAveragePrice functionality")
     public void givenThreeSymbolDataAreStored_whenGetAveragePrice_thenAveragePriceInPeriodIsReturned(){
         //given
-        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
-        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+        Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
 
         BigDecimal rightAveragePrice = BigDecimal.valueOf(1.5);
 
@@ -182,8 +184,8 @@ public class SymbolDataRepositoryTests {
     @DisplayName("Test findAllInPeriod  SymbolData not found functionality")
     public void givenSymbolDataIsNotStored_whenGetAveragePrice_thenNoPriceIsReturned(){
         //given
-        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
-        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
+        Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
 
         //when
         BigDecimal obtainedAveragePrice = repository.getAveragePrice(fromDate, toDate).orElse(null);

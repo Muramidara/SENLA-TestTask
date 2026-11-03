@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,15 +20,15 @@ public interface SymbolDataRepository extends JpaRepository<SymbolDataEntity, UU
 
     Optional<SymbolDataEntity> findFirstByOrderByFetchedAtDesc();
 
-    Optional<SymbolDataEntity> findFirstByFetchedAtBetweenOrderByFetchedAtDesc(LocalDateTime fromDate,
-                                                                               LocalDateTime toDate);
+    Optional<SymbolDataEntity> findFirstByFetchedAtBetweenOrderByFetchedAtDesc(Instant fromDate,
+                                                                               Instant toDate);
 
     @Query("SELECT sd FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
-    Page<SymbolDataEntity> findAllInPeriod(@Param("fromDate") LocalDateTime fromDate,
-                                           @Param("toDate") LocalDateTime toDate,
+    Page<SymbolDataEntity> findAllInPeriod(@Param("fromDate") Instant fromDate,
+                                           @Param("toDate") Instant toDate,
                                            Pageable pageable);
 
     @Query("SELECT AVG(sd.price) FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
-    Optional<BigDecimal> getAveragePrice(@Param("fromDate") LocalDateTime fromDate,
-                                         @Param("toDate") LocalDateTime toDate);
+    Optional<BigDecimal> getAveragePrice(@Param("fromDate") Instant fromDate,
+                                         @Param("toDate") Instant toDate);
 }

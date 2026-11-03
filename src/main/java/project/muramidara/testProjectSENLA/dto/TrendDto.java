@@ -14,8 +14,8 @@ import java.time.LocalDate;
 public class TrendDto {
 
     String symbol;
-    LocalDate start_date;
-    LocalDate end_date;
+    String start_date;
+    String end_date;
     String trend;
 
 }

@@ -18,7 +18,7 @@ public class SymbolDataMapper {
         return SymbolDataDto.builder().
                 symbol(entity.getSymbol())
                 .price(entity.getPrice().toPlainString())
-                .fetchedAt(entity.getFetchedAt().format(DateTimeFormatter.ISO_INSTANT))
+                .fetchedAt(entity.getFetchedAt().toString())
                 .build();
     }
 

@@ -18,11 +18,5 @@ public class SymbolDataDto {
     String price;
     String fetchedAt;
 
-    public SymbolDataDto fromEntity(SymbolDataEntity entity) {
-        return SymbolDataDto.builder().
-                symbol(entity.getSymbol())
-                .price(entity.getPrice().toPlainString())
-                .fetchedAt(entity.getFetchedAt().format(DateTimeFormatter.ISO_INSTANT))
-                .build();
-    }
+
 }

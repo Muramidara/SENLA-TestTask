@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,6 +30,6 @@ public class SymbolDataEntity {
     BigDecimal price;
 
     @Column(name = "fetchedAt", nullable = false)
-    LocalDateTime fetchedAt;
+    Instant fetchedAt;
 
 }
