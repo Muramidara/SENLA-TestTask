@@ -56,7 +56,8 @@ public class SymbolDataService {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
         Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
-        Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(startInstant, endInstant, pageParameters);
+        Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(startInstant, endInstant,
+                pageParameters);
         return symbolPageDtoMapper.mapEntityPageToDtoPage(symbolDataEntityPage);
     }
 
@@ -77,8 +78,8 @@ public class SymbolDataService {
         else if (lastPrice.compareTo(averagePrice) > 0) trend = "UPWARD";
         else trend = "DOWNWARD";
         return TrendDto.builder()
-                .start_date(fromDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                .end_date(toDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                .start_date(fromDate)
+                .end_date(toDate)
                 .symbol(lastSymbolDataEntity.getSymbol())
                 .trend(trend)
                 .build();
