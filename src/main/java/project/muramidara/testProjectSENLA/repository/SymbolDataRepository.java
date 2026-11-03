@@ -10,15 +10,17 @@ import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface SymbolDataRepository extends JpaRepository<SymbolDataEntity, UUID> {
 
-    @Query("SELECT sd FROM SymbolDataEntity sd LIMIT 1")
-    Optional<SymbolDataEntity> findLast();
+
+    Optional<SymbolDataEntity> findFirstByOrderByFetchedAtDesc();
+
+    Optional<SymbolDataEntity> findFirstByFetchedAtBetweenOrderByFetchedAtDesc(LocalDateTime fromDate,
+                                                                               LocalDateTime toDate);
 
     @Query("SELECT sd FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
     Page<SymbolDataEntity> findAllInPeriod(@Param("fromDate") LocalDateTime fromDate,

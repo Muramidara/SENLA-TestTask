@@ -44,13 +44,13 @@ public class SymbolDataRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test findLast SymbolData functionality")
-    public void givenSymbolDataIsStored_whenFindLast_thenSymbolDataIsReturned(){
+    @DisplayName("Test findFirstByOrderByFetchedAtDesc SymbolData functionality")
+    public void givenSymbolDataIsStored_whenFindFirstByOrderByFetchedAtDesc_thenSymbolDataIsReturned(){
         //given
         SymbolDataEntity symbolDataToSave = DataUtils.getSymbolDataEntity1Transient();
         repository.save(symbolDataToSave);
         //when
-        SymbolDataEntity obtainedSymbolData = repository.findLast().orElse(null);
+        SymbolDataEntity obtainedSymbolData = repository.findFirstByOrderByFetchedAtDesc().orElse(null);
         //then
         assertThat(obtainedSymbolData).isNotNull();
         assertThat(obtainedSymbolData.getId()).isNotNull();
@@ -60,15 +60,62 @@ public class SymbolDataRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test findLast SymbolData not found functionality")
-    public void givenSymbolDataIsNotStored_whenFindLast_thenOptionalIsEmpty(){
+    @DisplayName("Test findFirstByOrderByFetchedAtDesc SymbolData not found functionality")
+    public void givenSymbolDataIsNotStored_whenFindFirstByOrderByFetchedAtDesc_thenOptionalIsEmpty(){
         //given
 
         //when
-        SymbolDataEntity obtainedSymbolData = repository.findLast().orElse(null);
+        SymbolDataEntity obtainedSymbolData = repository.findFirstByOrderByFetchedAtDesc().orElse(null);
         //then
         assertThat(obtainedSymbolData).isNull();
     }
+
+    @Test
+    @DisplayName("Test findFirstByFetchedAtBetweenOrderByFetchedAtDesc SymbolData functionality")
+    public void givenThreeSymbolDataAreStored_whenFindFirstByFetchedAtBetweenOrderByFetchedAtDesc_thenLastSymbolDataIsReturned() {
+        //given
+        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1);
+        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1);
+
+        SymbolDataEntity symbolDataToSave1 = DataUtils.getSymbolDataEntity1Transient();
+        SymbolDataEntity symbolDataToSave2 = DataUtils.getSymbolDataEntity2Transient();
+        SymbolDataEntity symbolDataToSave3 = DataUtils.getSymbolDataEntity10Transient();
+
+        repository.saveAll(List.of(
+                symbolDataToSave1,
+                symbolDataToSave2,
+                symbolDataToSave3
+        ));
+
+        //when
+        SymbolDataEntity obtainedSymbolData = repository
+                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(fromDate, toDate)
+                .orElse(null);
+
+        //then
+        assertThat(obtainedSymbolData).isNotNull();
+        assertThat(obtainedSymbolData.getId()).isNotNull();
+        assertThat(obtainedSymbolData.getSymbol()).isEqualTo(symbolDataToSave2.getSymbol());
+        assertThat(obtainedSymbolData.getPrice()).isEqualByComparingTo(symbolDataToSave2.getPrice());
+        assertThat(obtainedSymbolData.getFetchedAt()).isEqualTo(symbolDataToSave2.getFetchedAt());
+    }
+
+    @Test
+    @DisplayName("Test findFirstByFetchedAtBetweenOrderByFetchedAtDesc SymbolData not found functionality")
+    public void givenSymbolDataIsNotStored_whenFindFirstByFetchedAtBetweenOrderByFetchedAtDesc_thenOptionalIsEmpty() {
+        //given
+        LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1);
+        LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1);
+
+        //when
+        SymbolDataEntity obtainedSymbolData = repository
+                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(fromDate, toDate)
+                .orElse(null);
+
+        //then
+        assertThat(obtainedSymbolData).isNull();
+    }
+
 
     @Test
     @DisplayName("Test findAllInPeriod SymbolData functionality")
@@ -95,7 +142,7 @@ public class SymbolDataRepositoryTests {
 
     @Test
     @DisplayName("Test findAllInPeriod  SymbolData not found functionality")
-    public void givenSymbolDataIsNotStored_whenFindAllInPeriod_thenNoSymbolDataIsReturned(){
+    public void givenSymbolDataIsNotStored_whenFindAllInPeriod_thenEmptyPageIsReturned(){
         //given
         LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
         LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
