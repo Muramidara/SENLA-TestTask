@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import project.muramidara.testProjectSENLA.dto.AveragePriceDto;
 import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
 import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
+import project.muramidara.testProjectSENLA.dto.TrendDto;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 import project.muramidara.testProjectSENLA.exception.IllegalDateValueException;
 import project.muramidara.testProjectSENLA.exception.SymbolDataNotFoundException;
@@ -18,6 +19,7 @@ import project.muramidara.testProjectSENLA.mapper.SymbolPageDtoMapper;
 import project.muramidara.testProjectSENLA.repository.SymbolDataRepository;
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -29,7 +31,7 @@ public class SymbolDataService {
     private final SymbolPageDtoMapper symbolPageDtoMapper;
 
     public SymbolDataDto getLastSymbolData(){
-        return symbolDataRepository.findLast()
+        return symbolDataRepository.findFirstByOrderByFetchedAtDesc()
                 .map(symbolDataMapper::mapEntityToDto)
                 .orElseThrow(
                 () -> new SymbolDataNotFoundException("SymbolData not found")
@@ -37,22 +39,44 @@ public class SymbolDataService {
     }
 
     public AveragePriceDto getAveragePrice(LocalDateTime fromDate, LocalDateTime toDate){
-        if(fromDate.isAfter(toDate)){
-            throw new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
-        }
+        validateDates(fromDate, toDate);
         return symbolDataRepository.getAveragePrice(fromDate, toDate)
                 .map(AveragePriceDto::new)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
     }
 
+
     public SymbolPageDto getAllSymbolsInPeriod(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageParameters){
+        validateDates(fromDate, toDate);
         Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(fromDate, toDate, pageParameters);
         return symbolPageDtoMapper.mapEntityPageToDtoPage(symbolDataEntityPage);
     }
 
-    public SymbolDataDto getTrend(LocalDateTime fromDate, LocalDateTime toDate){
-        return null;
+    public TrendDto getTrend(LocalDateTime fromDate, LocalDateTime toDate){
+       validateDates(fromDate, toDate);
+        BigDecimal averagePrice = symbolDataRepository.getAveragePrice(fromDate, toDate)
+                .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
+        SymbolDataEntity lastSymbolDataEntity = symbolDataRepository.findFirstByFetchedAtBetweenOrderByFetchedAtDesc(fromDate, toDate)
+                .get();
+
+        BigDecimal lastPrice = lastSymbolDataEntity.getPrice();
+
+        String trend;
+        if(lastPrice.compareTo(averagePrice) == 0) trend = "FLAT";
+        else if(lastPrice.compareTo(averagePrice) > 0) trend = "UPWARD";
+        else trend = "DOWNWARD";
+        return TrendDto.builder()
+                .start_date(fromDate.toLocalDate())
+                .end_date(toDate.toLocalDate())
+                .symbol(lastSymbolDataEntity.getSymbol())
+                .trend(trend)
+                .build();
     }
 
 
+    private static void validateDates(LocalDateTime fromDate, LocalDateTime toDate) {
+        if(fromDate.isAfter(toDate)){
+            throw new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
+        }
+    }
 }
