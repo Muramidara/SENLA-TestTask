@@ -95,7 +95,7 @@ public class SymbolDataRepositoryTests {
 
     @Test
     @DisplayName("Test findAllInPeriod  SymbolData not found functionality")
-    public void givenSymbolDataIsNotStored_whenFindAllInPeriod_thenNoSymbolDataIsReturned(){
+    public void givenSymbolDataIsNotStored_whenFindAllInPeriod_thenEmptyPageIsReturned(){
         //given
         LocalDateTime fromDate = LocalDateTime.of(2000, Month.JANUARY, 1, 1, 1 );
         LocalDateTime toDate = LocalDateTime.of(2000, Month.JANUARY, 2, 1, 1 );
