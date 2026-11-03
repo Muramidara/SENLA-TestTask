@@ -38,7 +38,7 @@ public class SymbolDataService {
 
     public AveragePriceDto getAveragePrice(LocalDateTime fromDate, LocalDateTime toDate){
         if(fromDate.isAfter(toDate)){
-            throw new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate))
+            throw new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
         }
         return symbolDataRepository.getAveragePrice(fromDate, toDate)
                 .map(AveragePriceDto::new)
