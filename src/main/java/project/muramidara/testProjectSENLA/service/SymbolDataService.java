@@ -34,36 +34,36 @@ public class SymbolDataService {
     private final SymbolDataMapper symbolDataMapper;
     private final SymbolPageDtoMapper symbolPageDtoMapper;
 
-    public SymbolDataDto getLastSymbolData(){
+    public SymbolDataDto getLastSymbolData() {
         return symbolDataRepository.findFirstByOrderByFetchedAtDesc()
                 .map(symbolDataMapper::mapEntityToDto)
                 .orElseThrow(
-                () -> new SymbolDataNotFoundException("SymbolData not found")
-        );
+                        () -> new SymbolDataNotFoundException("SymbolData not found")
+                );
     }
 
-    public AveragePriceDto getAveragePrice(LocalDate fromDate, LocalDate toDate){
+    public AveragePriceDto getAveragePrice(LocalDate fromDate, LocalDate toDate) {
         validateDates(fromDate, toDate);
-        Instant startInstant = LocalDateTime.from(fromDate).toInstant(ZoneOffset.UTC);
-        Instant endInstant = LocalDateTime.from(toDate).toInstant(ZoneOffset.UTC).plusSeconds(86_399);
+        Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
         return symbolDataRepository.getAveragePrice(startInstant, endInstant)
                 .map(AveragePriceDto::new)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
     }
 
 
-    public SymbolPageDto getAllSymbolsInPeriod(LocalDate fromDate, LocalDate toDate, Pageable pageParameters){
+    public SymbolPageDto getAllSymbolsInPeriod(LocalDate fromDate, LocalDate toDate, Pageable pageParameters) {
         validateDates(fromDate, toDate);
-        Instant startInstant = LocalDateTime.from(fromDate).toInstant(ZoneOffset.UTC);
-        Instant endInstant = LocalDateTime.from(toDate).toInstant(ZoneOffset.UTC).plusSeconds(86_399);
+        Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
         Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(startInstant, endInstant, pageParameters);
         return symbolPageDtoMapper.mapEntityPageToDtoPage(symbolDataEntityPage);
     }
 
-    public TrendDto getTrend(LocalDate fromDate, LocalDate toDate){
-       validateDates(fromDate, toDate);
-        Instant startInstant = LocalDateTime.from(fromDate).toInstant(ZoneOffset.UTC);
-        Instant endInstant = LocalDateTime.from(toDate).toInstant(ZoneOffset.UTC).plusSeconds(86_399);
+    public TrendDto getTrend(LocalDate fromDate, LocalDate toDate) {
+        validateDates(fromDate, toDate);
+        Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
         BigDecimal averagePrice = symbolDataRepository.getAveragePrice(startInstant, endInstant)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
         SymbolDataEntity lastSymbolDataEntity = symbolDataRepository
@@ -73,8 +73,8 @@ public class SymbolDataService {
         BigDecimal lastPrice = lastSymbolDataEntity.getPrice();
 
         String trend;
-        if(lastPrice.compareTo(averagePrice) == 0) trend = "FLAT";
-        else if(lastPrice.compareTo(averagePrice) > 0) trend = "UPWARD";
+        if (lastPrice.compareTo(averagePrice) == 0) trend = "FLAT";
+        else if (lastPrice.compareTo(averagePrice) > 0) trend = "UPWARD";
         else trend = "DOWNWARD";
         return TrendDto.builder()
                 .start_date(fromDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
@@ -86,7 +86,7 @@ public class SymbolDataService {
 
 
     private static void validateDates(LocalDate fromDate, LocalDate toDate) {
-        if(fromDate.isAfter(toDate)){
+        if (fromDate.isAfter(toDate)) {
             throw new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
         }
     }
