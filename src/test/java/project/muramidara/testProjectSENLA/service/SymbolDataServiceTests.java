@@ -143,14 +143,14 @@ public class SymbolDataServiceTests {
         //given
         LocalDate fromDate = LocalDate.of(2000, 1, 1);
         LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0, size = 10;
 
 
-        Pageable pageParameters = PageRequest.of(0, 10);
 
         SymbolDataEntity symbolDataEntity = DataUtils.getSymbolDataEntity1Persistent();
 
         Page<SymbolDataEntity> symbolDataEntityPage =
-                new PageImpl<>(List.of(symbolDataEntity), pageParameters, 1);
+                new PageImpl<>(List.of(symbolDataEntity), PageRequest.of(page, size), 1);
 
         SymbolPageDto expectedSymbolPageDto = mock(SymbolPageDto.class);
 
@@ -163,7 +163,7 @@ public class SymbolDataServiceTests {
 
         //when
         SymbolPageDto symbolPageDto =
-                symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, pageParameters);
+                symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size);
 
         //then
         assertThat(symbolPageDto).isNotNull();
@@ -176,10 +176,11 @@ public class SymbolDataServiceTests {
         //given
         LocalDate fromDate = LocalDate.of(2000, 1, 1);
         LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0, size = 10;
 
-        Pageable pageParameters = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<SymbolDataEntity> emptySymbolDataEntityPage = Page.empty(pageParameters);
+        Page<SymbolDataEntity> emptySymbolDataEntityPage = Page.empty(pageable);
 
         SymbolPageDto expectedSymbolPageDto = mock(SymbolPageDto.class);
 
@@ -192,7 +193,7 @@ public class SymbolDataServiceTests {
 
         //when
         SymbolPageDto symbolPageDto =
-                symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, pageParameters);
+                symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size);
 
         //then
         assertThat(symbolPageDto).isNotNull();
@@ -207,12 +208,12 @@ public class SymbolDataServiceTests {
         //given
         LocalDate fromDate = LocalDate.of(2000, 1, 31);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
-        Pageable pageParameters = PageRequest.of(0, 10);
+        int page = 0, size = 10;
 
 
         //when
         assertThrows(IllegalDateValueException.class,
-                () -> symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, pageParameters));
+                () -> symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size));
 
         //then
 

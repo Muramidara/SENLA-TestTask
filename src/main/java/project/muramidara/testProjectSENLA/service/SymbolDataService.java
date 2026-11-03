@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import project.muramidara.testProjectSENLA.dto.AveragePriceDto;
@@ -52,12 +54,13 @@ public class SymbolDataService {
     }
 
 
-    public SymbolPageDto getAllSymbolsInPeriod(LocalDate fromDate, LocalDate toDate, Pageable pageParameters) {
+    public SymbolPageDto getAllSymbolsInPeriod(LocalDate fromDate, LocalDate toDate, int page, int size) {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
         Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
+        Pageable pageable = PageRequest.of(page, size);
         Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(startInstant, endInstant,
-                pageParameters);
+                pageable);
         return symbolPageDtoMapper.mapEntityPageToDtoPage(symbolDataEntityPage);
     }
 
