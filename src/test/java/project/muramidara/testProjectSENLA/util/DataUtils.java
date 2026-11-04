@@ -53,8 +53,8 @@ public class DataUtils {
     public static TrendDto getTrendDto1() {
         return TrendDto.builder()
                 .symbol("BNBUSDT")
-                .start_date(LocalDate.of(2000, 1, 1))
-                .end_date(LocalDate.of(2000, 1, 31))
+                .start_date("2000-01-01")
+                .end_date("2000-01-31")
                 .trend("UPWARD")
                 .build();
     }

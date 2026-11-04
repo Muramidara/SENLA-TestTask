@@ -263,9 +263,9 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.symbol",
                         CoreMatchers.is(expectedTrendDto.getSymbol())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.start_date",
-                        CoreMatchers.is(expectedTrendDto.getStart_date().toString())))
+                        CoreMatchers.is(expectedTrendDto.getStart_date())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.end_date",
-                        CoreMatchers.is(expectedTrendDto.getEnd_date().toString())))
+                        CoreMatchers.is(expectedTrendDto.getEnd_date())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.trend",
                         CoreMatchers.is(expectedTrendDto.getTrend())));
     }

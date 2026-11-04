@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,8 +12,8 @@ import java.time.LocalDateTime;
 public class TrendDto {
 
     String symbol;
-    LocalDate start_date;
-    LocalDate end_date;
+    String start_date;
+    String end_date;
     String trend;
 
 }

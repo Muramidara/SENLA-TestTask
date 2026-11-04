@@ -81,8 +81,8 @@ public class SymbolDataService {
         else if (lastPrice.compareTo(averagePrice) > 0) trend = "UPWARD";
         else trend = "DOWNWARD";
         return TrendDto.builder()
-                .start_date(fromDate)
-                .end_date(toDate)
+                .start_date(fromDate.toString())
+                .end_date(toDate.toString())
                 .symbol(lastSymbolDataEntity.getSymbol())
                 .trend(trend)
                 .build();
