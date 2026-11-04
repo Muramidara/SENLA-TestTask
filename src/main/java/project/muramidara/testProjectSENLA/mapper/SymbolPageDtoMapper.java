@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class SymbolPageDtoMapper {
-    SymbolDataMapper symbolDataMapper;
+    private final SymbolDataMapper symbolDataMapper;
 
     public SymbolPageDto mapEntityPageToDtoPage(Page<SymbolDataEntity> entityPage){
         return SymbolPageDto.builder()
