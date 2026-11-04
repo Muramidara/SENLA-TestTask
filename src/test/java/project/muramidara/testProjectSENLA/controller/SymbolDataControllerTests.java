@@ -62,7 +62,7 @@ public class SymbolDataControllerTests {
     }
 
     @Test
-    @DisplayName("Test find last functionality")
+    @DisplayName("Test find last not found functionality")
     public void givenNoSavedSymbolData_whenFindLast_thenErrorResponse() throws Exception {
         //given
         BDDMockito.given(symbolDataService.getLastSymbolData())
