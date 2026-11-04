@@ -1,17 +1,18 @@
 package project.muramidara.testProjectSENLA.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.MultiValueMap;
 import project.muramidara.testProjectSENLA.dto.AveragePriceDto;
 import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
 import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
@@ -20,12 +21,11 @@ import project.muramidara.testProjectSENLA.exception.IllegalDateValueException;
 import project.muramidara.testProjectSENLA.exception.SymbolDataNotFoundException;
 import project.muramidara.testProjectSENLA.service.SymbolDataService;
 import project.muramidara.testProjectSENLA.util.DataUtils;
-import tools.jackson.databind.ObjectMapper;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Optional;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -35,8 +35,6 @@ public class SymbolDataControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockitoBean
     private SymbolDataService symbolDataService;
