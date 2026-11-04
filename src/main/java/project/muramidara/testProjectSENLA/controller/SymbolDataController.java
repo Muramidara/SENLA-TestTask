@@ -1,4 +1,4 @@
-package project.muramidara.testProjectSENLA.controller.rest;
+package project.muramidara.testProjectSENLA.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
