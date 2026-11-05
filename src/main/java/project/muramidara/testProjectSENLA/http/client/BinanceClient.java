@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import project.muramidara.testProjectSENLA.dto.BinanceResponseDto;
-import project.muramidara.testProjectSENLA.exception.BinanceApiException;
+
 
 import java.time.Duration;
 
