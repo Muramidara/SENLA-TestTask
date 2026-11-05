@@ -84,4 +84,12 @@ public class DataUtils {
                 .fetchedAt(Instant.parse("2000-01-03T00:00:00Z"))
                 .build();
     }
+
+    public static SymbolDataEntity getSymbolDataEntity20Transient() {
+        return SymbolDataEntity.builder()
+                .symbol("BNBUSDT")
+                .price(new BigDecimal("20.00"))
+                .fetchedAt(Instant.parse("2000-01-31T00:00:00Z"))
+                .build();
+    }
 }
