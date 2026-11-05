@@ -1,0 +1,4 @@
+binance:
+  api:
+  scheduling:
+    enabled: false

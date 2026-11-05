@@ -1,6 +1,5 @@
 package project.muramidara.testProjectSENLA.http.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

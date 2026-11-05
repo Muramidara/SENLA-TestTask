@@ -3,6 +3,7 @@ package project.muramidara.testProjectSENLA.mapper;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import project.muramidara.testProjectSENLA.dto.BinanceResponseDto;
 import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
 import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
@@ -21,7 +22,5 @@ public class SymbolDataMapper {
                 .fetchedAt(entity.getFetchedAt().toString())
                 .build();
     }
-
-
 
 }

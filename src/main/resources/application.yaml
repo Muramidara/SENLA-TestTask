@@ -15,3 +15,4 @@ binance:
       enabled: true
       fixed-delay: 60s
       initial-delay: 5s
+      default-retry-delay: PT5M
