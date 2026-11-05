@@ -1,4 +1,4 @@
-package project.muramidara.testProjectSENLA.controller;
+package project.muramidara.testProjectSENLA.http.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
