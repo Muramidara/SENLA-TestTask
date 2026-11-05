@@ -18,7 +18,7 @@ public class BinanceClient {
 
     public BinanceClient(RestClient.Builder builder,
                          @Value("${binance.api.base-url}") String baseUrl,
-                         @Value("${binance.api.api-endpoint}") String endpoint) {
+                         @Value("${binance.api.endpoint}") String endpoint) {
         this.restClient = builder.baseUrl(baseUrl).build();
         this.endpoint = endpoint;
     }

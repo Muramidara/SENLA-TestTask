@@ -13,7 +13,7 @@ import project.muramidara.testProjectSENLA.service.BinanceApiService;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnProperty(
-        prefix = "binance.api.scheduling",
+        prefix = "binance.scheduling",
         name = "enabled",
         havingValue = "true"
 )
@@ -21,8 +21,8 @@ public class BinanceApiScheduler {
 
     private final BinanceApiService binanceApiService;
 
-    @Scheduled(fixedDelayString = "${binance.api.scheduling.fixed-delay}",
-            initialDelayString = "${binance.api.scheduling.initial-delay}")
+    @Scheduled(fixedDelayString = "${binance.scheduling.fixed-delay}",
+            initialDelayString = "${binance.scheduling.initial-delay}")
     public void fetchPrice() {
         try{
             binanceApiService.fetchAndSavePrice();

@@ -24,7 +24,7 @@ public class BinanceApiService {
     private final SymbolDataRepository symbolDataRepository;
     @Value("${binance.api.symbol}")
     private String symbol;
-    @Value("${binance.api.scheduling.default-retry-delay}")
+    @Value("${binance.scheduling.default-retry-delay}")
     private String defaultRetryDelayTime;
 
     private Instant retryAllowedAfter = Instant.EPOCH;
