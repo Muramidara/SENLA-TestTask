@@ -6,3 +6,12 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
+binance:
+  api:
+    base-url: https://api.binance.com
+    api-endpoint: /api/v3/avgPrice
+    symbol: BNBUSDT
+    scheduling:
+      enabled: true
+      fixed-delay: 60s
+      initial-delay: 5s
