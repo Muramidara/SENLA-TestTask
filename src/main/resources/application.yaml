@@ -33,6 +33,6 @@ binance:
 
   scheduling:
     enabled: true
-    fixed-delay: 5s
-    initial-delay: 5s
+    fixed-delay: ${BINANCE_POOL_INTERVAL:PT5S}
+    initial-delay: PT5S
     default-retry-delay: PT5M
