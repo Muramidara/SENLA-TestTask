@@ -1,0 +1,212 @@
+{
+  "info": {
+    "name": "SENLA Test Task — Symbol Data API",
+    "description": "Postman requests for the Spring Boot REST API. Update collection variables for your environment. Only these endpoints are exposed by SymbolDataController; Binance fetching is scheduled, not a public REST endpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get latest price",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/price",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "price"
+          ],
+          "query": []
+        },
+        "description": "Returns the most recently saved cryptocurrency price. Returns 404 when no records exist."
+      },
+      "response": []
+    },
+    {
+      "name": "Get average price",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/prices/average?from={{fromDate}}&to={{toDate}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "prices",
+            "average"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "{{fromDate}}"
+            },
+            {
+              "key": "to",
+              "value": "{{toDate}}"
+            }
+          ]
+        },
+        "description": "Returns the average price for the inclusive date range. Dates are ISO yyyy-MM-dd. Returns 404 when no data exists in the period or when from > to."
+      },
+      "response": []
+    },
+    {
+      "name": "Get prices in period (paginated)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/prices?from={{fromDate}}&to={{toDate}}&page={{page}}&size={{size}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "{{fromDate}}"
+            },
+            {
+              "key": "to",
+              "value": "{{toDate}}"
+            },
+            {
+              "key": "page",
+              "value": "{{page}}"
+            },
+            {
+              "key": "size",
+              "value": "{{size}}"
+            }
+          ]
+        },
+        "description": "Returns a page of saved prices. page is zero-based. Default page=0 and size=10."
+      },
+      "response": []
+    },
+    {
+      "name": "Get prices in period (default pagination)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/prices?from={{fromDate}}&to={{toDate}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "prices"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "{{fromDate}}"
+            },
+            {
+              "key": "to",
+              "value": "{{toDate}}"
+            }
+          ]
+        },
+        "description": "Same endpoint with page and size omitted, to test default pagination (page=0, size=10)."
+      },
+      "response": []
+    },
+    {
+      "name": "Get price trend",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/prices/trend?from={{fromDate}}&to={{toDate}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "prices",
+            "trend"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "{{fromDate}}"
+            },
+            {
+              "key": "to",
+              "value": "{{toDate}}"
+            }
+          ]
+        },
+        "description": "Returns UPWARD, DOWNWARD, or FLAT by comparing the latest price with the average over the requested date range. Returns 404 when no data exists or when from > to."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "fromDate",
+      "value": "2000-01-01",
+      "type": "string"
+    },
+    {
+      "key": "toDate",
+      "value": "2000-01-31",
+      "type": "string"
+    },
+    {
+      "key": "page",
+      "value": "0",
+      "type": "string"
+    },
+    {
+      "key": "size",
+      "value": "10",
+      "type": "string"
+    }
+  ]
+}
