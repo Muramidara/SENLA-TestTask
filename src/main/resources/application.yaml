@@ -3,9 +3,9 @@ spring:
     name: testProjectSENLA
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/senla_test_task_db
-    username: postgres
-    password: postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/senla_test_task_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -20,10 +20,10 @@ spring:
     fail-on-missing-locations: true
     validate-migration-naming: true
 
-logging:
-  level:
-    org.flywaydb: DEBUG
-    org.springframework.boot.autoconfigure.flyway: DEBUG
+#logging:
+#  level:
+#    org.flywaydb: DEBUG
+#    org.springframework.boot.autoconfigure.flyway: DEBUG
 
 binance:
   api:
@@ -33,6 +33,6 @@ binance:
 
   scheduling:
     enabled: true
-    fixed-delay: ${BINANCE_POOL_INTERVAL:PT5S}
+    fixed-delay: ${BINANCE_POLL_INTERVAL:PT5S}
     initial-delay: PT5S
     default-retry-delay: PT5M
