@@ -60,7 +60,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.symbol",
                         CoreMatchers.is(savedSymbolDataEntity.getSymbol())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price",
-                        CoreMatchers.is(savedSymbolDataEntity.getPrice().toPlainString())))
+                        CoreMatchers.is(savedSymbolDataEntity.getPrice().setScale(15).toString())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.fetchedAt",
                         CoreMatchers.is(savedSymbolDataEntity.getFetchedAt().toString())));
     }

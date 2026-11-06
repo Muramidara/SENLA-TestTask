@@ -29,7 +29,7 @@ public class SymbolDataEntity {
     @Column(name = "price",   nullable = false, scale = 10)
     BigDecimal price;
 
-    @Column(name = "fetchedAt", nullable = false)
+    @Column(name = "fetched_at", nullable = false)
     Instant fetchedAt;
 
 }

@@ -8,6 +8,23 @@ spring:
     password: postgres
     driver-class-name: org.postgresql.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    schemas: public
+    default-schema: public
+    locations: classpath:db/migration
+    fail-on-missing-locations: true
+    validate-migration-naming: true
+
+logging:
+  level:
+    org.flywaydb: DEBUG
+    org.springframework.boot.autoconfigure.flyway: DEBUG
+
 binance:
   api:
     base-url: https://api.binance.com
