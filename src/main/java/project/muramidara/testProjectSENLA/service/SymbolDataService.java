@@ -94,7 +94,7 @@ public class SymbolDataService {
 
     private static void validateDates(LocalDate fromDate, LocalDate toDate) {
         if (!fromDate.isBefore(toDate)) {
-            throw new IllegalRequestValueException("from(%s) can't be after to(%s)".formatted(fromDate, toDate));
+            throw new IllegalRequestValueException("to(%s) must be after from(%s)".formatted(toDate, fromDate));
         }
     }
 }

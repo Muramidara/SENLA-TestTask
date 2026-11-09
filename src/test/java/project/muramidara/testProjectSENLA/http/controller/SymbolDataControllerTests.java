@@ -107,8 +107,7 @@ public class SymbolDataControllerTests {
         LocalDate fromDate = LocalDate.of(2000, 1, 31);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
         BDDMockito.given(symbolDataService.getAveragePrice(fromDate, toDate))
-                .willThrow(new IllegalRequestValueException("from(%s) can't be after to(%s)"
-                        .formatted(fromDate, toDate)));
+                .willThrow(new IllegalRequestValueException("to(%s) must be after from(%s)".formatted(toDate, fromDate)));
 
         //when
         ResultActions result = mockMvc.perform(get("/api/v1/prices/average")
@@ -120,7 +119,7 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("from(%s) can't be after to(%s)".formatted(fromDate, toDate))));
+                        CoreMatchers.is("to(%s) must be after from(%s)".formatted(toDate, fromDate))));
     }
 
     @Test
@@ -191,8 +190,7 @@ public class SymbolDataControllerTests {
         int size = 10;
 
         BDDMockito.given(symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size))
-                .willThrow(new IllegalRequestValueException("from(%s) can't be after to(%s)"
-                        .formatted(fromDate, toDate)));
+                .willThrow(new IllegalRequestValueException("to(%s) must be after from(%s)".formatted(toDate, fromDate)));
 
         //when
         ResultActions result = mockMvc.perform(get("/api/v1/prices")
@@ -206,8 +204,7 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("from(%s) can't be after to(%s)"
-                                .formatted(fromDate, toDate))));
+                        CoreMatchers.is("to(%s) must be after from(%s)".formatted(toDate, fromDate))));
     }
 
     @Test
@@ -277,8 +274,7 @@ public class SymbolDataControllerTests {
         LocalDate toDate = LocalDate.of(2000, 1, 1);
 
         BDDMockito.given(symbolDataService.getTrend(fromDate, toDate))
-                .willThrow(new IllegalRequestValueException("from(%s) can't be after to(%s)"
-                        .formatted(fromDate, toDate)));
+                .willThrow(new IllegalRequestValueException("to(%s) must be after from(%s)".formatted(toDate, fromDate)));
 
         //when
         ResultActions result = mockMvc.perform(get("/api/v1/prices/trend")
@@ -290,8 +286,7 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("from(%s) can't be after to(%s)"
-                                .formatted(fromDate, toDate))));
+                        CoreMatchers.is("to(%s) must be after from(%s)".formatted(toDate, fromDate))));
     }
 
     @Test

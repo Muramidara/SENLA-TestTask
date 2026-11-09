@@ -128,8 +128,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
                         CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("from(%s) can't be after to(%s)"
-                                .formatted(fromDate, toDate))));
+                        CoreMatchers.is("to(%s) must be after from(%s)".formatted(toDate, fromDate))));
     }
 
     @Test
@@ -212,8 +211,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
                         CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("from(%s) can't be after to(%s)"
-                                .formatted(fromDate, toDate))));
+                        CoreMatchers.is("to(%s) must be after from(%s)".formatted(toDate, fromDate))));
     }
 
     @Test
@@ -382,8 +380,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
                         CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("from(%s) can't be after to(%s)"
-                                .formatted(fromDate, toDate))));
+                        CoreMatchers.is("to(%s) must be after from(%s)".formatted(toDate, fromDate))));
     }
 
     @Test

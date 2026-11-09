@@ -207,7 +207,7 @@ curl "http://localhost:8080/api/v1/prices?from=2026-11-01&to=2026-11-07&page=0&s
 ```json
 {
   "status": 400,
-  "message": "from(2026-11-06) can't be after to(2026-11-01)"
+  "message": "to(2026-11-01) must be after from(2026-11-06)"
 }
 ```
 
@@ -266,7 +266,7 @@ curl "http://localhost:8080/api/v1/prices/average?from=2026-11-01&to=2026-11-06"
 ```json
 {
   "status": 400,
-  "message": "from(2026-11-06) can't be after to(2026-11-01)"
+  "message": "to(2026-11-06) must be after from(2026-11-06)"
 }
 ```
 
@@ -317,7 +317,7 @@ curl "http://localhost:8080/api/v1/prices/trend?from=2026-11-01&to=2026-11-06"
 ```json
 {
   "status": 400,
-  "message": "from(2026-11-06) can't be after to(2026-11-01)"
+  "message": "to(2026-11-06) must be after from(2026-11-06)"
 }
 ```
 
