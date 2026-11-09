@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.testcontainers.utility.TestcontainersConfiguration;
+import project.muramidara.testProjectSENLA.TestcontainersConfiguration;
 import project.muramidara.testProjectSENLA.dto.TrendDto;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 import project.muramidara.testProjectSENLA.repository.SymbolDataRepository;
