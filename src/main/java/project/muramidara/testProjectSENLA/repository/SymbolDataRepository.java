@@ -10,7 +10,6 @@ import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,15 +19,21 @@ public interface SymbolDataRepository extends JpaRepository<SymbolDataEntity, UU
 
     Optional<SymbolDataEntity> findFirstByOrderByFetchedAtDesc();
 
-    Optional<SymbolDataEntity> findFirstByFetchedAtBetweenOrderByFetchedAtDesc(Instant fromDate,
-                                                                               Instant toDate);
+    @Query(value = "SELECT * FROM public.symbols_data " +
+            "WHERE fetched_at >= :fromDate AND fetched_at < :toDate " +
+            "ORDER BY fetched_at DESC" +
+            " LIMIT 1",
+    nativeQuery = true)
+    Optional<SymbolDataEntity> findLastInPeriod(Instant fromDate,
+                                                Instant toDate);
 
-    @Query("SELECT sd FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
+    @Query("SELECT sd FROM SymbolDataEntity sd WHERE sd.fetchedAt >= :fromDate AND sd.fetchedAt < :toDate" +
+            " ORDER BY sd.fetchedAt DESC")
     Page<SymbolDataEntity> findAllInPeriod(@Param("fromDate") Instant fromDate,
                                            @Param("toDate") Instant toDate,
                                            Pageable pageable);
 
-    @Query("SELECT AVG(sd.price) FROM SymbolDataEntity sd WHERE sd.fetchedAt BETWEEN :fromDate AND :toDate")
+    @Query("SELECT AVG(sd.price) FROM SymbolDataEntity sd WHERE sd.fetchedAt >= :fromDate AND sd.fetchedAt < :toDate")
     Optional<BigDecimal> getAveragePrice(@Param("fromDate") Instant fromDate,
                                          @Param("toDate") Instant toDate);
 }

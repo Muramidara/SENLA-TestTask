@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.ActiveProfiles;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 import project.muramidara.testProjectSENLA.util.DataUtils;
 
@@ -44,8 +43,8 @@ public class SymbolDataRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test findFirstByOrderByFetchedAtDesc SymbolData functionality")
-    public void givenSymbolDataIsStored_whenFindFirstByOrderByFetchedAtDesc_thenSymbolDataIsReturned(){
+    @DisplayName("Test find last SymbolData functionality")
+    public void givenSymbolDataIsStored_whenFindLast_thenSymbolDataIsReturned(){
         //given
         SymbolDataEntity symbolDataToSave = DataUtils.getSymbolDataEntity1Transient();
         repository.save(symbolDataToSave);
@@ -60,8 +59,8 @@ public class SymbolDataRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test findFirstByOrderByFetchedAtDesc SymbolData not found functionality")
-    public void givenSymbolDataIsNotStored_whenFindFirstByOrderByFetchedAtDesc_thenOptionalIsEmpty(){
+    @DisplayName("Test find last SymbolData not found functionality")
+    public void givenSymbolDataIsNotStored_whenFindLast_thenOptionalIsEmpty(){
         //given
 
         //when
@@ -71,11 +70,11 @@ public class SymbolDataRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test findFirstByFetchedAtBetweenOrderByFetchedAtDesc SymbolData functionality")
-    public void givenThreeSymbolDataAreStored_whenFindFirstByFetchedAtBetweenOrderByFetchedAtDesc_thenLastSymbolDataIsReturned() {
+    @DisplayName("Test find last in period SymbolData functionality")
+    public void givenThreeSymbolDataAreStored_whenFindLastInPeriod_thenLastSymbolDataIsReturned() {
         //given
         Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
-        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-03T00:00:00Z");
 
         SymbolDataEntity symbolDataToSave1 = DataUtils.getSymbolDataEntity1Transient();
         SymbolDataEntity symbolDataToSave2 = DataUtils.getSymbolDataEntity2Transient();
@@ -89,7 +88,7 @@ public class SymbolDataRepositoryTests {
 
         //when
         SymbolDataEntity obtainedSymbolData = repository
-                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(fromDate, toDate)
+                .findLastInPeriod(fromDate, toDate)
                 .orElse(null);
 
         //then
@@ -101,15 +100,15 @@ public class SymbolDataRepositoryTests {
     }
 
     @Test
-    @DisplayName("Test findFirstByFetchedAtBetweenOrderByFetchedAtDesc SymbolData not found functionality")
-    public void givenSymbolDataIsNotStored_whenFindFirstByFetchedAtBetweenOrderByFetchedAtDesc_thenOptionalIsEmpty() {
+    @DisplayName("Test find last in period SymbolData not found functionality")
+    public void givenSymbolDataIsNotStored_whenFindLastInPeriod_thenOptionalIsEmpty() {
         //given
         Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
         Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
 
         //when
         SymbolDataEntity obtainedSymbolData = repository
-                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(fromDate, toDate)
+                .findLastInPeriod(fromDate, toDate)
                 .orElse(null);
 
         //then
@@ -122,7 +121,7 @@ public class SymbolDataRepositoryTests {
     public void givenThreeSymbolDataAreStored_whenFindAllInPeriod_thenNotEmptyPageIsReturned(){
         //given
         Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
-        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-03T00:00:00Z");
         Pageable pageable = PageRequest.of(0, 5);
 
 
@@ -160,7 +159,7 @@ public class SymbolDataRepositoryTests {
     public void givenThreeSymbolDataAreStored_whenGetAveragePrice_thenAveragePriceInPeriodIsReturned(){
         //given
         Instant fromDate = Instant.parse("2000-01-01T00:00:00Z");
-        Instant toDate = Instant.parse("2000-01-02T00:00:00Z");
+        Instant toDate = Instant.parse("2000-01-03T00:00:00Z");
 
         BigDecimal rightAveragePrice = BigDecimal.valueOf(1.5);
 

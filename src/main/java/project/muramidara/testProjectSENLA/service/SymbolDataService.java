@@ -1,13 +1,9 @@
 package project.muramidara.testProjectSENLA.service;
 
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import project.muramidara.testProjectSENLA.dto.AveragePriceDto;
 import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
@@ -24,9 +20,7 @@ import project.muramidara.testProjectSENLA.repository.SymbolDataRepository;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +41,7 @@ public class SymbolDataService {
     public AveragePriceDto getAveragePrice(LocalDate fromDate, LocalDate toDate) {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
         return symbolDataRepository.getAveragePrice(startInstant, endInstant)
                 .map(AveragePriceDto::new)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
@@ -57,7 +51,7 @@ public class SymbolDataService {
     public SymbolPageDto getAllSymbolsInPeriod(LocalDate fromDate, LocalDate toDate, int page, int size) {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
         Pageable pageable = PageRequest.of(page, size);
         Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(startInstant, endInstant,
                 pageable);
@@ -67,11 +61,11 @@ public class SymbolDataService {
     public TrendDto getTrend(LocalDate fromDate, LocalDate toDate) {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endInstant = toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
         BigDecimal averagePrice = symbolDataRepository.getAveragePrice(startInstant, endInstant)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
         SymbolDataEntity lastSymbolDataEntity = symbolDataRepository
-                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(startInstant, endInstant)
+                .findLastInPeriod(startInstant, endInstant)
                 .get();
 
         BigDecimal lastPrice = lastSymbolDataEntity.getPrice();

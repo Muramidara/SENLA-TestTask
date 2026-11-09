@@ -26,7 +26,6 @@ import project.muramidara.testProjectSENLA.util.DataUtils;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -238,7 +237,7 @@ public class SymbolDataServiceTests {
         BDDMockito.given(symbolDataRepository.getAveragePrice(any(Instant.class), any(Instant.class)))
                 .willReturn(Optional.of(averagePrice));
 
-        BDDMockito.given(symbolDataRepository.findFirstByFetchedAtBetweenOrderByFetchedAtDesc(
+        BDDMockito.given(symbolDataRepository.findLastInPeriod(
                                 any(Instant.class), any(Instant.class)))
                 .willReturn(Optional.of(lastSymbolDataEntity));
 
@@ -270,7 +269,7 @@ public class SymbolDataServiceTests {
                 .willReturn(Optional.of(averagePrice));
 
         BDDMockito.given(symbolDataRepository
-                        .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(
+                        .findLastInPeriod(
                                 any(Instant.class), any(Instant.class)))
                 .willReturn(Optional.of(lastSymbolDataEntity));
 
@@ -302,7 +301,7 @@ public class SymbolDataServiceTests {
                 .willReturn(Optional.of(averagePrice));
 
         BDDMockito.given(symbolDataRepository
-                        .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(
+                        .findLastInPeriod(
                                 any(Instant.class), any(Instant.class)))
                 .willReturn(Optional.of(lastSymbolDataEntity));
 
@@ -334,7 +333,7 @@ public class SymbolDataServiceTests {
 
         //then
         verify(symbolDataRepository, never())
-                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(
+                .findLastInPeriod(
                         any(Instant.class), any(Instant.class));
         verify(symbolDataRepository, times(1))
                 .getAveragePrice(any(Instant.class), any(Instant.class));
@@ -356,7 +355,7 @@ public class SymbolDataServiceTests {
                 .getAveragePrice(any(Instant.class), any(Instant.class));
 
         verify(symbolDataRepository, never())
-                .findFirstByFetchedAtBetweenOrderByFetchedAtDesc(
+                .findLastInPeriod(
                         any(Instant.class), any(Instant.class));
     }
 
