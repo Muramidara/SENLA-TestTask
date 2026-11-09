@@ -107,7 +107,7 @@ public class SymbolDataControllerTests {
         LocalDate fromDate = LocalDate.of(2000, 1, 31);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
         BDDMockito.given(symbolDataService.getAveragePrice(fromDate, toDate))
-                .willThrow(new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)"
+                .willThrow(new IllegalRequestValueException("from(%s) can't be after to(%s)"
                         .formatted(fromDate, toDate)));
 
         //when
@@ -120,7 +120,7 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate))));
+                        CoreMatchers.is("from(%s) can't be after to(%s)".formatted(fromDate, toDate))));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class SymbolDataControllerTests {
         int size = 10;
 
         BDDMockito.given(symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size))
-                .willThrow(new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)"
+                .willThrow(new IllegalRequestValueException("from(%s) can't be after to(%s)"
                         .formatted(fromDate, toDate)));
 
         //when
@@ -206,7 +206,7 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
+                        CoreMatchers.is("from(%s) can't be after to(%s)"
                                 .formatted(fromDate, toDate))));
     }
 
@@ -277,7 +277,7 @@ public class SymbolDataControllerTests {
         LocalDate toDate = LocalDate.of(2000, 1, 1);
 
         BDDMockito.given(symbolDataService.getTrend(fromDate, toDate))
-                .willThrow(new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)"
+                .willThrow(new IllegalRequestValueException("from(%s) can't be after to(%s)"
                         .formatted(fromDate, toDate)));
 
         //when
@@ -290,7 +290,7 @@ public class SymbolDataControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
+                        CoreMatchers.is("from(%s) can't be after to(%s)"
                                 .formatted(fromDate, toDate))));
     }
 

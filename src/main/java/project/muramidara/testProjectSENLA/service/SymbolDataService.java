@@ -41,7 +41,7 @@ public class SymbolDataService {
     public AveragePriceDto getAveragePrice(LocalDate fromDate, LocalDate toDate) {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.atStartOfDay().toInstant(ZoneOffset.UTC);
         return symbolDataRepository.getAveragePrice(startInstant, endInstant)
                 .map(AveragePriceDto::new)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
@@ -52,7 +52,7 @@ public class SymbolDataService {
         validatePageParameters(page, size);
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.atStartOfDay().toInstant(ZoneOffset.UTC);
         Pageable pageable = PageRequest.of(page, size);
         Page<SymbolDataEntity> symbolDataEntityPage = symbolDataRepository.findAllInPeriod(startInstant, endInstant,
                 pageable);
@@ -64,7 +64,7 @@ public class SymbolDataService {
     public TrendDto getTrend(LocalDate fromDate, LocalDate toDate) {
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
-        Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
+        Instant endInstant = toDate.atStartOfDay().toInstant(ZoneOffset.UTC);
         BigDecimal averagePrice = symbolDataRepository.getAveragePrice(startInstant, endInstant)
                 .orElseThrow(() -> new SymbolDataNotFoundException("SymbolData not found"));
         SymbolDataEntity lastSymbolDataEntity = symbolDataRepository
@@ -93,8 +93,8 @@ public class SymbolDataService {
     }
 
     private static void validateDates(LocalDate fromDate, LocalDate toDate) {
-        if (fromDate.isAfter(toDate)) {
-            throw new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
+        if (!fromDate.isBefore(toDate)) {
+            throw new IllegalRequestValueException("from(%s) can't be after to(%s)".formatted(fromDate, toDate));
         }
     }
 }

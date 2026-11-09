@@ -28,7 +28,7 @@ public interface SymbolDataRepository extends JpaRepository<SymbolDataEntity, UU
                                                 Instant toDate);
 
     @Query("SELECT sd FROM SymbolDataEntity sd WHERE sd.fetchedAt >= :fromDate AND sd.fetchedAt < :toDate" +
-            " ORDER BY sd.fetchedAt DESC")
+            " ORDER BY sd.fetchedAt")
     Page<SymbolDataEntity> findAllInPeriod(@Param("fromDate") Instant fromDate,
                                            @Param("toDate") Instant toDate,
                                            Pageable pageable);

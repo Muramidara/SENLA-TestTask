@@ -128,7 +128,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
                         CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
+                        CoreMatchers.is("from(%s) can't be after to(%s)"
                                 .formatted(fromDate, toDate))));
     }
 
@@ -212,7 +212,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
                         CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
+                        CoreMatchers.is("from(%s) can't be after to(%s)"
                                 .formatted(fromDate, toDate))));
     }
 
@@ -337,7 +337,7 @@ public class SymbolDataIT {
     public void givenSavedSymbolData_whenFindTrendInPeriod_thenSuccessResponse() throws Exception {
         //given
         LocalDate fromDate = LocalDate.of(2000, 1, 1);
-        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        LocalDate toDate = LocalDate.of(2000, 2, 1);
 
         symbolDataRepository.saveAll(List.of(
                 DataUtils.getSymbolDataEntity1Transient(),
@@ -382,7 +382,7 @@ public class SymbolDataIT {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
                         CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
-                        CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
+                        CoreMatchers.is("from(%s) can't be after to(%s)"
                                 .formatted(fromDate, toDate))));
     }
 
