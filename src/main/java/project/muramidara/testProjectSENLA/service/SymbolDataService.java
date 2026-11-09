@@ -10,7 +10,7 @@ import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
 import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
 import project.muramidara.testProjectSENLA.dto.TrendDto;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
-import project.muramidara.testProjectSENLA.exception.IllegalDateValueException;
+import project.muramidara.testProjectSENLA.exception.IllegalRequestValueException;
 import project.muramidara.testProjectSENLA.exception.SymbolDataNotFoundException;
 import project.muramidara.testProjectSENLA.mapper.SymbolDataMapper;
 import project.muramidara.testProjectSENLA.mapper.SymbolPageDtoMapper;
@@ -49,6 +49,7 @@ public class SymbolDataService {
 
 
     public SymbolPageDto getAllSymbolsInPeriod(LocalDate fromDate, LocalDate toDate, int page, int size) {
+        validatePageParameters(page, size);
         validateDates(fromDate, toDate);
         Instant startInstant = fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
         Instant endInstant = toDate.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC);
@@ -57,6 +58,8 @@ public class SymbolDataService {
                 pageable);
         return symbolPageDtoMapper.mapEntityPageToDtoPage(symbolDataEntityPage);
     }
+
+
 
     public TrendDto getTrend(LocalDate fromDate, LocalDate toDate) {
         validateDates(fromDate, toDate);
@@ -82,10 +85,16 @@ public class SymbolDataService {
                 .build();
     }
 
+    private void validatePageParameters(int page, int size) {
+        if (page < 0 || size < 1 || size > 100) {
+            throw new IllegalRequestValueException(("Page must be non negative (received page: %s)" +
+                    " and size must be between 1 and 100 (received size:%s)").formatted(page, size));
+        }
+    }
 
     private static void validateDates(LocalDate fromDate, LocalDate toDate) {
         if (fromDate.isAfter(toDate)) {
-            throw new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
+            throw new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate));
         }
     }
 }

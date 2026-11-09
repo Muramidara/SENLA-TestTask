@@ -16,7 +16,7 @@ import project.muramidara.testProjectSENLA.dto.AveragePriceDto;
 import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
 import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
 import project.muramidara.testProjectSENLA.dto.TrendDto;
-import project.muramidara.testProjectSENLA.exception.IllegalDateValueException;
+import project.muramidara.testProjectSENLA.exception.IllegalRequestValueException;
 import project.muramidara.testProjectSENLA.exception.SymbolDataNotFoundException;
 import project.muramidara.testProjectSENLA.service.SymbolDataService;
 import project.muramidara.testProjectSENLA.util.DataUtils;
@@ -107,7 +107,7 @@ public class SymbolDataControllerTests {
         LocalDate fromDate = LocalDate.of(2000, 1, 31);
         LocalDate toDate = LocalDate.of(2000, 1, 1);
         BDDMockito.given(symbolDataService.getAveragePrice(fromDate, toDate))
-                .willThrow(new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)"
+                .willThrow(new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)"
                         .formatted(fromDate, toDate)));
 
         //when
@@ -117,8 +117,8 @@ public class SymbolDataControllerTests {
 
         //then
         result.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(404)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is("fromDate(%s) can't be after toDate(%s)".formatted(fromDate, toDate))));
     }
@@ -191,7 +191,7 @@ public class SymbolDataControllerTests {
         int size = 10;
 
         BDDMockito.given(symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size))
-                .willThrow(new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)"
+                .willThrow(new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)"
                         .formatted(fromDate, toDate)));
 
         //when
@@ -203,8 +203,8 @@ public class SymbolDataControllerTests {
 
         //then
         result.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(404)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
                                 .formatted(fromDate, toDate))));
@@ -277,7 +277,7 @@ public class SymbolDataControllerTests {
         LocalDate toDate = LocalDate.of(2000, 1, 1);
 
         BDDMockito.given(symbolDataService.getTrend(fromDate, toDate))
-                .willThrow(new IllegalDateValueException("fromDate(%s) can't be after toDate(%s)"
+                .willThrow(new IllegalRequestValueException("fromDate(%s) can't be after toDate(%s)"
                         .formatted(fromDate, toDate)));
 
         //when
@@ -287,8 +287,8 @@ public class SymbolDataControllerTests {
 
         //then
         result.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(404)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status", CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
                                 .formatted(fromDate, toDate))));

@@ -124,9 +124,9 @@ public class SymbolDataIT {
 
         //then
         result.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
-                        CoreMatchers.is(404)))
+                        CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
                                 .formatted(fromDate, toDate))));
@@ -208,9 +208,9 @@ public class SymbolDataIT {
 
         //then
         result.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
-                        CoreMatchers.is(404)))
+                        CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
                                 .formatted(fromDate, toDate))));
@@ -243,6 +243,93 @@ public class SymbolDataIT {
                         CoreMatchers.is(false)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.items.length()",
                         CoreMatchers.is(1)));
+    }
+
+    @Test
+    @DisplayName("Test find all symbols in period with negative page functionality")
+    public void givenNegativePage_whenFindAllInPeriod_thenErrorResponse() throws Exception {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = -1;
+        int size = 10;
+
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/prices")
+                .param("from", fromDate.toString())
+                .param("to", toDate.toString())
+                .param("page", String.valueOf(page))
+                .param("size", String.valueOf(size)));
+
+        //then
+        result.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status",
+                        CoreMatchers.is(400)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        CoreMatchers.is(
+                                ("Page must be non negative (received page: %s)" +
+                                        " and size must be between 1 and 100 (received size:%s)")
+                                        .formatted(page, size)
+                        )));
+    }
+
+    @Test
+    @DisplayName("Test find all symbols in period with zero size functionality")
+    public void givenZeroSize_whenFindAllInPeriod_thenErrorResponse() throws Exception {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0;
+        int size = 0;
+
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/prices")
+                .param("from", fromDate.toString())
+                .param("to", toDate.toString())
+                .param("page", String.valueOf(page))
+                .param("size", String.valueOf(size)));
+
+        //then
+        result.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status",
+                        CoreMatchers.is(400)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        CoreMatchers.is(
+                                ("Page must be non negative (received page: %s)" +
+                                        " and size must be between 1 and 100 (received size:%s)")
+                                        .formatted(page, size)
+                        )));
+    }
+
+    @Test
+    @DisplayName("Test find all symbols in period with size exceeding maximum functionality")
+    public void givenSizeExceedingMaximum_whenFindAllInPeriod_thenErrorResponse() throws Exception {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0;
+        int size = 101;
+
+        //when
+        ResultActions result = mockMvc.perform(get("/api/v1/prices")
+                .param("from", fromDate.toString())
+                .param("to", toDate.toString())
+                .param("page", String.valueOf(page))
+                .param("size", String.valueOf(size)));
+
+        //then
+        result.andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status",
+                        CoreMatchers.is(400)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message",
+                        CoreMatchers.is(
+                                ("Page must be non negative (received page: %s)" +
+                                        " and size must be between 1 and 100 (received size:%s)")
+                                        .formatted(page, size)
+                        )));
     }
 
     @Test
@@ -291,9 +378,9 @@ public class SymbolDataIT {
 
         //then
         result.andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status",
-                        CoreMatchers.is(404)))
+                        CoreMatchers.is(400)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is("fromDate(%s) can't be after toDate(%s)"
                                 .formatted(fromDate, toDate))));

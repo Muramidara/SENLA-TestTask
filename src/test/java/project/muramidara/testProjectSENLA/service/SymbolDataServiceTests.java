@@ -16,7 +16,7 @@ import project.muramidara.testProjectSENLA.dto.SymbolDataDto;
 import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
 import project.muramidara.testProjectSENLA.dto.TrendDto;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
-import project.muramidara.testProjectSENLA.exception.IllegalDateValueException;
+import project.muramidara.testProjectSENLA.exception.IllegalRequestValueException;
 import project.muramidara.testProjectSENLA.exception.SymbolDataNotFoundException;
 import project.muramidara.testProjectSENLA.mapper.SymbolDataMapper;
 import project.muramidara.testProjectSENLA.mapper.SymbolPageDtoMapper;
@@ -127,7 +127,7 @@ public class SymbolDataServiceTests {
 
 
         //when
-        assertThrows(IllegalDateValueException.class,
+        assertThrows(IllegalRequestValueException.class,
                 () -> symbolDataService.getAveragePrice(fromDate, toDate));
 
         //then
@@ -167,6 +167,43 @@ public class SymbolDataServiceTests {
         //then
         assertThat(symbolPageDto).isNotNull();
         assertThat(symbolPageDto).isEqualTo(expectedSymbolPageDto);
+    }
+
+    @Test
+    @DisplayName("Test get all symbols in period with maximum allowed size functionality")
+    public void givenMaximumAllowedSize_whenGetAllSymbolsInPeriod_thenSymbolPageDtoIsReturned() {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0;
+        int size = 100;
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SymbolDataEntity> entityPage = Page.empty(pageable);
+        SymbolPageDto expectedSymbolPageDto = DataUtils.getSymbolPageDto1();
+
+        BDDMockito.given(symbolDataRepository.findAllInPeriod(
+                        any(Instant.class),
+                        any(Instant.class),
+                        eq(pageable)))
+                .willReturn(entityPage);
+
+        BDDMockito.given(symbolPageDtoMapper.mapEntityPageToDtoPage(entityPage))
+                .willReturn(expectedSymbolPageDto);
+
+        //when
+        SymbolPageDto result = symbolDataService.getAllSymbolsInPeriod(
+                fromDate, toDate, page, size
+        );
+
+        //then
+        assertThat(result).isEqualTo(expectedSymbolPageDto);
+
+        verify(symbolDataRepository).findAllInPeriod(
+                any(Instant.class),
+                any(Instant.class),
+                eq(pageable)
+        );
     }
 
     @Test
@@ -211,7 +248,7 @@ public class SymbolDataServiceTests {
 
 
         //when
-        assertThrows(IllegalDateValueException.class,
+        assertThrows(IllegalRequestValueException.class,
                 () -> symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size));
 
         //then
@@ -219,6 +256,81 @@ public class SymbolDataServiceTests {
         verify(symbolDataRepository, never()).findAllInPeriod(any(Instant.class), any(Instant.class),
                 any(Pageable.class));
         verify(symbolPageDtoMapper, never()).mapEntityPageToDtoPage(any(Page.class));
+    }
+
+    @Test
+    @DisplayName("Test get all symbols in period with negative page functionality")
+    public void givenNegativePage_whenGetAllSymbolsInPeriod_thenExceptionIsThrown() {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = -1;
+        int size = 10;
+
+        //when
+        IllegalRequestValueException exception = assertThrows(
+                IllegalRequestValueException.class,
+                () -> symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size)
+        );
+
+        //then
+        assertThat(exception.getMessage()).isEqualTo(
+                ("Page must be non negative (received page: %s) " +
+                        "and size must be between 1 and 100 (received size:%s)")
+                                .formatted(page, size)
+        );
+
+        verifyNoInteractions(symbolDataRepository, symbolPageDtoMapper);
+    }
+
+    @Test
+    @DisplayName("Test get all symbols in period with zero size functionality")
+    public void givenZeroSize_whenGetAllSymbolsInPeriod_thenExceptionIsThrown() {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0;
+        int size = 0;
+
+        //when
+        IllegalRequestValueException exception = assertThrows(
+                IllegalRequestValueException.class,
+                () -> symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size)
+        );
+
+        //then
+        assertThat(exception.getMessage()).isEqualTo(
+                ("Page must be non negative (received page: %s)" +
+                        " and size must be between 1 and 100 (received size:%s)")
+                        .formatted(page, size)
+        );
+
+        verifyNoInteractions(symbolDataRepository, symbolPageDtoMapper);
+    }
+
+    @Test
+    @DisplayName("Test get all symbols in period with size exceeding maximum functionality")
+    public void givenSizeExceedingMaximum_whenGetAllSymbolsInPeriod_thenExceptionIsThrown() {
+        //given
+        LocalDate fromDate = LocalDate.of(2000, 1, 1);
+        LocalDate toDate = LocalDate.of(2000, 1, 31);
+        int page = 0;
+        int size = 101;
+
+        //when
+        IllegalRequestValueException exception = assertThrows(
+                IllegalRequestValueException.class,
+                () -> symbolDataService.getAllSymbolsInPeriod(fromDate, toDate, page, size)
+        );
+
+        //then
+        assertThat(exception.getMessage()).isEqualTo(
+                ("Page must be non negative (received page: %s)" +
+                        " and size must be between 1 and 100 (received size:%s)")
+                        .formatted(page, size)
+        );
+
+        verifyNoInteractions(symbolDataRepository, symbolPageDtoMapper);
     }
 
 
@@ -347,7 +459,7 @@ public class SymbolDataServiceTests {
         LocalDate toDate = LocalDate.of(2000, 1, 1);
 
         //when
-        assertThrows(IllegalDateValueException.class,
+        assertThrows(IllegalRequestValueException.class,
                 () -> symbolDataService.getTrend(fromDate, toDate));
 
         //then
