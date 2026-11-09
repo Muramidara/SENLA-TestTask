@@ -9,6 +9,7 @@ import project.muramidara.testProjectSENLA.dto.SymbolPageDto;
 import project.muramidara.testProjectSENLA.entity.SymbolDataEntity;
 
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class SymbolDataMapper {
         return SymbolDataDto.builder().
                 symbol(entity.getSymbol())
                 .price(entity.getPrice().toPlainString())
-                .fetchedAt(entity.getFetchedAt().toString())
+                .fetchedAt(entity.getFetchedAt().truncatedTo(ChronoUnit.SECONDS).toString())
                 .build();
     }
 
