@@ -26,7 +26,6 @@ public class BinanceApiScheduler {
     public void fetchPrice() {
         try{
             binanceApiService.fetchAndSavePrice();
-            log.info("Binance price successfully fetched and saved");
         } catch (RestClientResponseException e) {
             log.error(
                     "Binance returned HTTP {}: {}",

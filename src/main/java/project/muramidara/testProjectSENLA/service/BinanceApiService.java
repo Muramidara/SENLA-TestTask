@@ -67,9 +67,9 @@ public class BinanceApiService {
             throw e;
         }
 
-        if (dto == null || dto.getPrice() == null) {
+        if (dto == null) {
             throw new IllegalStateException(
-                    "Binance returned an invalid price response"
+                    "Binance returned an invalid response"
             );
         }
 
@@ -80,6 +80,7 @@ public class BinanceApiService {
                 .build();
 
         symbolDataRepository.save(entity);
+        log.info("Binance price successfully fetched and saved");
     }
 
 
