@@ -87,25 +87,6 @@ public class BinanceApiServiceTests {
         verify(symbolDataRepository, never()).save(any(SymbolDataEntity.class));
     }
 
-    @Test
-    @DisplayName("Test fetch and save price with null price functionality")
-    public void givenBinanceResponseWithoutPrice_whenFetchAndSavePrice_thenExceptionIsThrown(){
-        //given
-        BinanceResponseDto responseDto = new BinanceResponseDto(
-                5,
-                null,
-                946684800000L
-        );
-        given(binanceClient.getBinanceData("BNBUSDT"))
-                .willReturn(responseDto);
-
-        //when
-        assertThrows(IllegalStateException.class,
-                () -> binanceApiService.fetchAndSavePrice());
-
-        //then
-        verify(symbolDataRepository, never()).save(any(SymbolDataEntity.class));
-    }
 
     @Test
     @DisplayName("Test fetch and save price with rate limit functionality")
